@@ -15,6 +15,13 @@ def update(inventory):
     new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
     inventory.append(new_dictionary)
     return inventory
+def stock(inventory):
+    for i in range(len(inventory)):
+        print("current stock = " + str(inventory[i]['QUANTITIY'])) 
+        inventory[i]['QUANTITIY'] += int(input("Stock Level change for " + str(inventory[i]['ITEM']) + ": "))
+    return inventory
+    
+    
 inventory = [
     # item name, quantity, price, avaliable
     {'ITEM': 'item2', 'QUANTITIY': 430, 'PRICE': 1.99, 'AVALIABLE': 'True'},
@@ -29,6 +36,7 @@ while True:
     print("choices:")
     print("-Sort")
     print("-Update")
+    print("-Stock")
     c = input("input choice: ")
     if c.lower() == "sort":
         print("-----------------")
@@ -40,5 +48,11 @@ while True:
         inventory = update(inventory)
         for i in range(len(inventory)):
             print(inventory[i])
-        
+    if c.lower() == "stock":
+        print("-----------------")
+        print("stock level changing, add (-) before num to reduce stock")
+        print("-----------------")
+        inventory = stock(inventory)
+        for i in range(len(inventory)):
+            print(inventory[i])
     
