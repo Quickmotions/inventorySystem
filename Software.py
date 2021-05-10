@@ -51,6 +51,12 @@ def UpdateCSV(inventory):
         writer.writeheader()
         for i in range(len(inventory)):
             writer.writerow(inventory[i])
+    with open('sales.csv', 'w', newline ='') as file:  
+        header = ['TOTAL', 'INCOME']
+        writer = csv.DictWriter(file, fieldnames = header)
+        writer.writeheader()
+        for i in range(len(sales)):
+            writer.writerow(sales[i])
 inventory = []
 sales = []
 with open('inventory.csv', 'r') as file:
@@ -60,6 +66,13 @@ with open('inventory.csv', 'r') as file:
         split[3] = split[3][:-1]
         dictionary = {'ITEM': split[0], 'QUANTITIY': int(split[1]), 'PRICE': float(split[2]), 'AVALIABLE': split[3]}
         inventory.append(dictionary)
+with open('sales.csv', 'r') as file:
+    dictionary = dict()
+    for line in file.readlines()[1:]:
+        split = line.split(",")
+        split[1] = split[1][:-1]
+        dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1])}
+        sales.append(dictionary)
 
 while True:
     print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View    [5]-Remove")
