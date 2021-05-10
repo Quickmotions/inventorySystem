@@ -74,9 +74,8 @@ with open('sales.csv', 'r') as file:
     dictionary = dict()
     for line in file.readlines()[1:]:
         split = line.split(",")
-        print(split)
         split[3] = split[3][:-1]
-        dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1]), 'DATE': split[1], 'TIME': split[1]}
+        dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1]), 'DATE': split[2], 'TIME': split[3]}
         sales.append(dictionary)
 
 while True:
