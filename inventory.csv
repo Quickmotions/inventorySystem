@@ -1,5 +1,6 @@
 ITEM,QUANTITIY,PRICE,AVALIABLE
-Car,31,69221.99,true
-food,304,4.99,true
-software,360,45.99,true
-beverages,2029,8.99,true
+Car,31,1000.0,TRUE
+food,304,3.0,TRUE
+software,360,20.0,TRUE
+beverages,2029,5.0,TRUE
+TV,60,120,TRUE
