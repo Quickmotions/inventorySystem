@@ -1,4 +1,5 @@
 import csv
+from datetime import date, datetime
 def sort(inventory):
     choice = 0
     for key in inventory[0]:
@@ -7,20 +8,20 @@ def sort(inventory):
     choice = input("Type what you want to sort by: ")
     try:
         sorted_List = sorted(inventory, key=lambda k: k[choice.upper()])
-        UpdateCSV(inventory)
+        UpdateCSV(inventory,sales)
         return sorted_List
     except:
         choice = 'ITEM'
         sorted_List = sorted(inventory, key=lambda k: k[choice.upper()])
-        UpdateCSV(inventory)
+        UpdateCSV(inventory,sales)
         return sorted_List
 def update(inventory):
     new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
     inventory.append(new_dictionary)
-    UpdateCSV(inventory)
+    UpdateCSV(inventory,sales)
     return inventory
 
-def stock(inventory):
+def stock(inventory, sales):
     price = 0
     for i in range(len(inventory)):
         print("current stock = " + str(inventory[i]['QUANTITIY']))
@@ -28,11 +29,14 @@ def stock(inventory):
         if(level < 0):
             price += inventory[i]['PRICE'] * level * -1
         inventory[i]['QUANTITIY'] += level
-    UpdateCSV(inventory)
+    newSale = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(price), 2), 'INCOME': round(int(price), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
+    sales.append(newSale)
+    UpdateCSV(inventory,sales)
     print("-----------------")
-    print("Total income = " + str(round(price, 2)))
+    print("Income = " + str(round(price, 2)))
+    print("New Total = " + str(round(sales[len(sales)-1]['TOTAL'] + int(price),2)))
     print("-----------------")
-    return inventory
+    return inventory, sales
 
 def remove(inventory):
     
@@ -41,10 +45,10 @@ def remove(inventory):
         return inventory
     else:
         inventory.remove(inventory[x])
-        UpdateCSV(inventory)
+        UpdateCSV(inventory,sales)
         return inventory
 
-def UpdateCSV(inventory):
+def UpdateCSV(inventory,sales):
     with open('inventory.csv', 'w', newline ='') as file:  
         header = ['ITEM', 'QUANTITIY', 'PRICE', 'AVALIABLE']
         writer = csv.DictWriter(file, fieldnames = header)
@@ -52,7 +56,7 @@ def UpdateCSV(inventory):
         for i in range(len(inventory)):
             writer.writerow(inventory[i])
     with open('sales.csv', 'w', newline ='') as file:  
-        header = ['TOTAL', 'INCOME']
+        header = ['TOTAL', 'INCOME', 'DATE', 'TIME']
         writer = csv.DictWriter(file, fieldnames = header)
         writer.writeheader()
         for i in range(len(sales)):
@@ -70,12 +74,12 @@ with open('sales.csv', 'r') as file:
     dictionary = dict()
     for line in file.readlines()[1:]:
         split = line.split(",")
-        split[1] = split[1][:-1]
-        dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1])}
+        split[3] = split[3][:-1]
+        dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1]), 'DATE': split[1], 'TIME': split[1]}
         sales.append(dictionary)
 
 while True:
-    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View    [5]-Remove")
+    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View      [5]-Sales    [6]-Remove")
     c = ""
     c = input("input choice: ")
     if c.lower() == "sort" or c.lower() == "1":
@@ -92,14 +96,18 @@ while True:
         print("-----------------")
         print("stock level changing, add (-) before num to reduce stock")
         print("-----------------")
-        inventory = stock(inventory)
+        inventory, sales = stock(inventory, sales)
         for i in range(len(inventory)):
             print(inventory[i])
     if c.lower() == "view" or c.lower() == "4":
         print("-----------------")
         for i in range(len(inventory)):
             print(inventory[i])
-    if c.lower() == "remove" or c.lower() == "5":
+    if c.lower() == "sales" or c.lower() == "5":
+        print("-----------------")
+        for i in range(len(sales)):
+            print(sales[i])
+    if c.lower() == "remove" or c.lower() == "6":
         print("-----------------")
         for i in range(len(inventory)):
             print(i+1 , " : ", inventory[i])
