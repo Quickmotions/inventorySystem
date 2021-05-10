@@ -21,10 +21,17 @@ def update(inventory):
     return inventory
 
 def stock(inventory):
+    price = 0
     for i in range(len(inventory)):
-        print("current stock = " + str(inventory[i]['QUANTITIY'])) 
-        inventory[i]['QUANTITIY'] += int(input("Stock Level change for " + str(inventory[i]['ITEM']) + ": "))
+        print("current stock = " + str(inventory[i]['QUANTITIY']))
+        level = int(input("Stock Level change for " + str(inventory[i]['ITEM']) + ": "))
+        if(level < 0):
+            price += inventory[i]['PRICE'] * level * -1
+        inventory[i]['QUANTITIY'] += level
     UpdateCSV(inventory)
+    print("-----------------")
+    print("Total income = " + str(round(price, 2)))
+    print("-----------------")
     return inventory
 
 def remove(inventory):
@@ -45,6 +52,7 @@ def UpdateCSV(inventory):
         for i in range(len(inventory)):
             writer.writerow(inventory[i])
 inventory = []
+sales = []
 with open('inventory.csv', 'r') as file:
     dictionary = dict()
     for line in file.readlines()[1:]:
@@ -54,14 +62,7 @@ with open('inventory.csv', 'r') as file:
         inventory.append(dictionary)
 
 while True:
-    print("Inventory Manager")
-    print("-----------------")
-    print("choices:")
-    print("[1]-Sort")
-    print("[2]-Add")
-    print("[3]-Stock")
-    print("[4]-View")
-    print("[5]-Remove")
+    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View    [5]-Remove")
     c = ""
     c = input("input choice: ")
     if c.lower() == "sort" or c.lower() == "1":
