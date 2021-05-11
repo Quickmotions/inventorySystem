@@ -20,7 +20,12 @@ def update(inventory):
     inventory.append(new_dictionary)
     UpdateCSV(inventory,sales)
     return inventory
-
+def value(sales,inventory):
+    money = input("change in value ( - for loss): ")
+    newValue = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(money), 2), 'INCOME': round(int(money), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
+    sales.append(newValue)
+    UpdateCSV(inventory,sales)
+    return sales,inventory
 def stock(inventory, sales):
     price = 0
     for i in range(len(inventory)):
@@ -61,6 +66,19 @@ def UpdateCSV(inventory,sales):
         writer.writeheader()
         for i in range(len(sales)):
             writer.writerow(sales[i])
+def findAVG(sales):
+    count = 0
+    average = 0
+    for i in range(len(sales)):
+        average += int(sales[i]['INCOME'])
+        count += 1
+    average = round(average / count)
+    return average
+def findTOTAL(sales):
+    total = 0
+    for i in range(len(sales)):
+        total += int(sales[i]['INCOME'])
+    return total
 inventory = []
 sales = []
 with open('inventory.csv', 'r') as file:
@@ -79,7 +97,7 @@ with open('sales.csv', 'r') as file:
         sales.append(dictionary)
 
 while True:
-    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View      [5]-Sales    [6]-Remove")
+    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View   [5]-Value   [6]-Sales    [7]-Remove    [8]-Stats")
     c = ""
     c = input("input choice: ")
     if c.lower() == "sort" or c.lower() == "1":
@@ -103,11 +121,16 @@ while True:
         print("-----------------")
         for i in range(len(inventory)):
             print(inventory[i])
-    if c.lower() == "sales" or c.lower() == "5":
+    if c.lower() == "value" or c.lower() == "5":
+        print("-----------------")
+        sales,inventory = value(sales,inventory)
+        for i in range(len(sales)):
+            print(sales[i])
+    if c.lower() == "sales" or c.lower() == "6":
         print("-----------------")
         for i in range(len(sales)):
             print(sales[i])
-    if c.lower() == "remove" or c.lower() == "6":
+    if c.lower() == "remove" or c.lower() == "7":
         print("-----------------")
         for i in range(len(inventory)):
             print(i+1 , " : ", inventory[i])
@@ -115,5 +138,11 @@ while True:
         inventory = remove(inventory)
         for i in range(len(inventory)):
             print(inventory[i])
-   
+    if c.lower() == "stats" or c.lower() == "8":
+        print("-----------------")
+        print("Average Income: " + str(findAVG(sales)))
+        print("Total Income: " + str(findTOTAL(sales)))
+        print("-----------------")
+        
+            
             
