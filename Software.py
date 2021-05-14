@@ -52,7 +52,6 @@ def remove(inventory):
         inventory.remove(inventory[x])
         UpdateCSV(inventory,sales)
         return inventory
-
 def UpdateCSV(inventory,sales):
     with open('inventory.csv', 'w', newline ='') as file:  
         header = ['ITEM', 'QUANTITIY', 'PRICE', 'AVALIABLE']
