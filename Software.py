@@ -78,6 +78,82 @@ def findTOTAL(sales):
     for i in range(len(sales)):
         total += int(sales[i]['INCOME'])
     return total
+
+def sortButtonPress():
+        print("-----------------")
+        sorted = sort(inventory)
+        for i in range(len(sorted)):
+            print(sorted[i])
+def addButtonPress():
+        print("-----------------")
+        inventory = update(inventory)
+        for i in range(len(inventory)):
+            print(inventory[i])
+def stockButtonPress():
+        print("-----------------")
+        print("stock level changing, add (-) before num to reduce stock")
+        print("-----------------")
+        inventory, sales = stock(inventory, sales)
+        for i in range(len(inventory)):
+            print(inventory[i])
+def valueButtonPress():
+        print("-----------------")
+        sales,inventory = value(sales,inventory)
+        for i in range(len(sales)):
+            print(sales[i])
+def removeButtonPress():
+        print("-----------------")
+        for i in range(len(inventory)):
+            print(i+1 , " : ", inventory[i])
+        print("-----------------")
+        inventory = remove(inventory)
+        for i in range(len(inventory)):
+            print(inventory[i])
+def statsButtonPress():
+        print("-----------------")
+        print("Average Income: " + str(findAVG(sales)))
+        print("Total Income: " + str(findTOTAL(sales)))
+        print("-----------------")
+        
+
+def createUI():
+    root = tk.Tk()
+    global labelText
+    gridText = ""
+    title = tk.Label(text="Inventory Managment System (v1.0)")
+    for i in range(len(inventory)):
+        gridText += str(inventory[i]) + "\n"
+    inventoryGrid = tk.Label(root, 
+                        text=gridText, 
+                        borderwidth = 3,
+                        relief="sunken",
+                        justify="left")
+    salesText = ""
+    for i in range(len(sales)):
+        salesText += str(sales[i]) + "\n"
+    salesGrid = tk.Label(root, 
+                        text=gridText, 
+                        borderwidth = 3,
+                        relief="sunken",
+                        justify="left")
+    sortButton = tk.Button(borderwidth = 3, text="Sort", command=sortButtonPress)
+    addButton = tk.Button(borderwidth = 3, text="Add", command=addButtonPress)
+    stockButton = tk.Button(borderwidth = 3,  text="Stock", command=stockButtonPress)
+    valueButton = tk.Button(borderwidth = 3,  text="Value", command=valueButtonPress)
+    removeButton = tk.Button(borderwidth = 3, text="Remove", command=removeButtonPress)
+    statsButton = tk.Button(borderwidth = 3,  text="Stats", command=statsButtonPress)
+    
+    sortButton.grid(row=3, column=1 )
+    addButton.grid(row=3, column=2 )
+    stockButton.grid(row=3, column=3 )
+    valueButton.grid(row=3, column=4 )
+    removeButton.grid(row=3, column=5 )
+    statsButton.grid(row=3, column=6 )
+    title.grid(row=1)
+    inventoryGrid.grid(row=2)
+    salesGrid.grid(row=3)
+    root.mainloop()
+
 inventory = []
 sales = []
 with open('inventory.csv', 'r') as file:
@@ -94,6 +170,13 @@ with open('sales.csv', 'r') as file:
         split[3] = split[3][:-1]
         dictionary = {'TOTAL': int(split[0]), 'INCOME': int(split[1]), 'DATE': split[2], 'TIME': split[3]}
         sales.append(dictionary)
+
+import tkinter as tk
+createUI()
+
+
+
+
 
 while True:
     print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View   [5]-Value   [6]-Sales    [7]-Remove    [8]-Stats")
