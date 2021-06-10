@@ -56,7 +56,7 @@ def update(inventory,sales):
     priceInput = tk.Entry(updateRoot,borderwidth = 3)
     avaliableLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Avaliability:")
     avaliableInput = tk.Entry(updateRoot,borderwidth = 3)
-    inputButton = tk.Button(updateRoot,borderwidth = 3,  text="Enter", command=lambda: updateInv(inventory,itemp,quantitityLabel,priceLabel,avaliableLabel))
+    inputButton = tk.Button(updateRoot,borderwidth = 3,  text="Enter", command=lambda: updateInv(inventory,itemInput,quantitityInput,priceInput,avaliableInput))
     backButton = tk.Button(updateRoot,borderwidth = 3,  text="Back", command=lambda: returnMain(updateRoot,inventory,sales))
 
     titleText.grid(row=1)
@@ -72,21 +72,12 @@ def update(inventory,sales):
     inputButton.grid(row= 2, column=3)
     backButton.grid(row=3, column=3)
     updateRoot.mainloop()
-    
 
-    new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
+def updateInv(inventory,itemInput,quantitityInput,priceInput,avaliableInput):
+    new_dictionary = {'ITEM': itemInput.get(), 'QUANTITIY': int(quantitityInput.get()) , 'PRICE': int(priceInput.get()) , 'AVALIABLE': avaliableInput.get()}
     inventory.append(new_dictionary)
     UpdateCSV(inventory,sales)
-    return inventory
 
-def updateInv(inventory,itemLabel,quantitityLabel,priceLabel,avaliableLabel):
-    new_dictionary = {'ITEM': itemLabel.get(), 'QUANTITIY': quantitityLabel.get() , 'PRICE': priceLabel.get() , 'AVALIABLE': avaliableLabel.get()}
-    inventory.append(new_dictionary)
-    itemLabel.set("")
-    quantitityLabel.set("")
-    priceLabel.set("")
-    avaliableLabel.set("")
-    UpdateCSV(inventory,sales)
 def value(sales,inventory):
     money = input("change in value ( - for loss): ")
     newValue = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(money), 2), 'INCOME': round(int(money), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
