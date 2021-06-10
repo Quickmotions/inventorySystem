@@ -24,7 +24,7 @@ def sort(inventory,sales):
     quantitiyButton.grid(row=2, column=2)
     priceButton.grid(row=2,column=3)
     avaliableButton.grid(row=2, column=4)
-    tk.mainloop()
+    inventoryGrid.mainloop()
 
 def returnMain(sortRoot,inventory,sales):
     sortRoot.quit()
@@ -46,13 +46,47 @@ def sortBy(sortRoot,inventoryGrid,inventory, num):
     inventoryGrid.grid(row=2)
 
 def update(inventory,sales):
+    updateRoot = tk.Tk()
+    titleText = tk.Label(updateRoot,text="Inventory Managment System (v1.0)")
+    itemLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Name:")
+    itemInput = tk.Entry(updateRoot,borderwidth = 3)
+    quantitityLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Quantity:")
+    quantitityInput = tk.Entry(borderwidth = 3)
+    priceLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Price:")
+    priceInput = tk.Entry(updateRoot,borderwidth = 3)
+    avaliableLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Avaliability:")
+    avaliableInput = tk.Entry(updateRoot,borderwidth = 3)
+    inputButton = tk.Button(updateRoot,borderwidth = 3,  text="Enter", command=lambda: updateInv(inventory,itemLabel,quantitityLabel,priceLabel,avaliableLabel))
+    backButton = tk.Button(updateRoot,borderwidth = 3,  text="Back", command=lambda: returnMain(updateRoot,inventory,sales))
+
+    titleText.grid(row=1)
+    itemLabel.grid(row=2)
+    itemInput .grid(row=2, column=1)
+    quantitityLabel.grid(row=3)
+    quantitityInput.grid(row=3, column=1)
+    priceLabel.grid(row=4)
+    priceInput.grid(row=4,column=1)
+    avaliableLabel.grid(row=5)
+    avaliableInput.grid(row=5,column=1)
+
+    inputButton.grid(row= 2, column=3)
+    backButton.grid(row=3, column=3)
+    updateRoot.mainloop()
     
+
     new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
     inventory.append(new_dictionary)
     UpdateCSV(inventory,sales)
     return inventory
 
-
+def updateInv(inventory,itemLabel,quantitityLabel,priceLabel,avaliableLabel):
+    new_dictionary = {'ITEM': itemLabel.get(), 'QUANTITIY': quantitityLabel.get() , 'PRICE': priceLabel.get() , 'AVALIABLE': avaliableLabel.get()}
+    inventory.append(new_dictionary)
+    itemLabel.set("")
+    quantitityLabel.set("")
+    priceLabel.set("")
+    avaliableLabel.set("")
+    UpdateCSV(inventory,sales)
 def value(sales,inventory):
     money = input("change in value ( - for loss): ")
     newValue = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(money), 2), 'INCOME': round(int(money), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
