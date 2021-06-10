@@ -1,5 +1,6 @@
 import csv
 from datetime import date, datetime
+from typing import Collection
 def sort(inventory,sales):
     sortRoot = tk.Tk()
     titleText = tk.Label(sortRoot,text="Inventory Managment System (v1.0)")
@@ -173,9 +174,12 @@ def createUI(inventory,sales):
     root = tk.Tk()
     global labelText
     gridText = ""
+    gridSales = ""
+    for i in range(len(sales)):
+        gridText += str(sales[i]) + "\n"
     title = tk.Label(text="Inventory Managment System (v1.0)")
     for i in range(len(inventory)):
-        gridText += str(inventory[i]) + "\n"
+        gridSales += str(inventory[i]) + "\n"
     inventoryGrid = tk.Label(root, 
                         text=gridText, 
                         borderwidth = 3,
@@ -185,7 +189,7 @@ def createUI(inventory,sales):
     for i in range(len(sales)):
         salesText += str(sales[i]) + "\n"
     salesGrid = tk.Label(root, 
-                        text=gridText, 
+                        text=gridSales, 
                         borderwidth = 3,
                         relief="sunken",
                         justify="left")
@@ -196,12 +200,12 @@ def createUI(inventory,sales):
     removeButton = tk.Button(borderwidth = 3, text="Remove", command=lambda: removeButtonPress (sales,inventory,root))
     statsButton = tk.Button(borderwidth = 3,  text="Stats", command=lambda: statsButtonPress (sales,inventory,root))
     
-    sortButton.grid(row=3, column=1 )
-    addButton.grid(row=3, column=2 )
-    stockButton.grid(row=3, column=3 )
-    valueButton.grid(row=3, column=4 )
-    removeButton.grid(row=3, column=5 )
-    statsButton.grid(row=3, column=6 )
+    sortButton.grid(row=3, column=2 )
+    addButton.grid(row=3, column=3 )
+    stockButton.grid(row=3, column=4 )
+    valueButton.grid(row=3, column=5 )
+    removeButton.grid(row=3, column=6 )
+    statsButton.grid(row=3, column=7 )
     title.grid(row=1)
     inventoryGrid.grid(row=2)
     salesGrid.grid(row=3)
