@@ -45,11 +45,14 @@ def sortBy(sortRoot,inventoryGrid,inventory, num):
                         justify="left")
     inventoryGrid.grid(row=2)
 
-def update(inventory):
+def update(inventory,sales):
+    
     new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
     inventory.append(new_dictionary)
     UpdateCSV(inventory,sales)
     return inventory
+
+
 def value(sales,inventory):
     money = input("change in value ( - for loss): ")
     newValue = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(money), 2), 'INCOME': round(int(money), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
@@ -111,11 +114,10 @@ def findTOTAL(sales):
 
 def sortButtonPress(sales, inventory,root):
         root.destroy()
-        
         sort(inventory,sales)
 def addButtonPress(sales, inventory,root):
         root.destroy()
-        update(inventory)
+        update(inventory,sales)
 
 def stockButtonPress(sales, inventory,root):
         root.destroy()
