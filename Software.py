@@ -72,6 +72,8 @@ def update(inventory,sales):
     inputButton.grid(row= 2, column=3)
     backButton.grid(row=3, column=3)
     updateRoot.mainloop()
+    
+
 
 def updateInv(inventory,itemInput,quantitityInput,priceInput,avaliableInput):
     new_dictionary = {'ITEM': itemInput.get(), 'QUANTITIY': int(quantitityInput.get()) , 'PRICE': int(priceInput.get()) , 'AVALIABLE': avaliableInput.get()}
