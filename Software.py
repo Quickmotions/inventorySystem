@@ -1,20 +1,50 @@
 import csv
 from datetime import date, datetime
-def sort(inventory):
-    choice = 0
-    for key in inventory[0]:
-        print(key)
-    print()
-    choice = input("Type what you want to sort by: ")
-    try:
-        sorted_List = sorted(inventory, key=lambda k: k[choice.upper()])
-        UpdateCSV(inventory,sales)
-        return sorted_List
-    except:
-        choice = 'ITEM'
-        sorted_List = sorted(inventory, key=lambda k: k[choice.upper()])
-        UpdateCSV(inventory,sales)
-        return sorted_List
+def sort(inventory,sales):
+    sortRoot = tk.Tk()
+    titleText = tk.Label(sortRoot,text="Inventory Managment System (v1.0)")
+    gridText = ""
+    for i in range(len(inventory)):
+        gridText += str(inventory[i]) + "\n"
+    inventoryGrid = tk.Label(sortRoot, 
+                        text=gridText, 
+                        borderwidth = 3,
+                        relief="sunken",
+                        justify="left")
+    itemButton = tk.Button(sortRoot,borderwidth = 3,  text="Sort Name", command=lambda: sortBy (sortRoot,inventoryGrid,inventory, "ITEM"))
+    quantitiyButton = tk.Button(sortRoot,borderwidth = 3,  text="Sort Quantity", command=lambda: sortBy (sortRoot,inventoryGrid,inventory,"QUANTITIY"))
+    priceButton = tk.Button(sortRoot,borderwidth = 3,  text="Sort Price", command=lambda: sortBy (sortRoot,inventoryGrid,inventory,"PRICE"))
+    avaliableButton = tk.Button(sortRoot,borderwidth = 3,  text="Sort Avaliability", command=lambda: sortBy (sortRoot,inventoryGrid,inventory,"AVALIABLE"))
+    backButton = tk.Button(sortRoot,borderwidth = 3,  text="Back", command=lambda: returnMain(sortRoot,inventory,sales))
+
+    backButton.grid(row=3,column=4)
+    titleText.grid(row=1)
+    inventoryGrid.grid(row=2)
+    itemButton.grid(row = 2, column=1)
+    quantitiyButton.grid(row=2, column=2)
+    priceButton.grid(row=2,column=3)
+    avaliableButton.grid(row=2, column=4)
+    tk.mainloop()
+
+def returnMain(sortRoot,inventory,sales):
+    sortRoot.quit()
+    sortRoot.destroy()
+    createUI(inventory,sales)
+
+def sortBy(sortRoot,inventoryGrid,inventory, num):
+    inventoryGrid.destroy()
+    sorted_List = sorted(inventory, key=lambda k: k[num.upper()])
+    UpdateCSV(inventory,sales)
+    gridText = ""
+    for i in range(len(sorted_List)):
+        gridText += str(sorted_List[i]) + "\n"
+    inventoryGrid = tk.Label(sortRoot, 
+                        text=gridText, 
+                        borderwidth = 3,
+                        relief="sunken",
+                        justify="left")
+    inventoryGrid.grid(row=2)
+
 def update(inventory):
     new_dictionary = {'ITEM': input("item name: "), 'QUANTITIY': input("item quantity: "), 'PRICE': input("item price: "), 'AVALIABLE': input("item avaliability: ")}
     inventory.append(new_dictionary)
@@ -37,10 +67,10 @@ def stock(inventory, sales):
     newSale = {'TOTAL': round(sales[len(sales)-1]['TOTAL'] + int(price), 2), 'INCOME': round(int(price), 2), 'DATE': date.today().strftime("%d/%m/%Y"), 'TIME': datetime.now().strftime("%H:%M:%S")} 
     sales.append(newSale)
     UpdateCSV(inventory,sales)
-    print("-----------------")
+    
     print("Income = " + str(round(price, 2)))
     print("New Total = " + str(round(sales[len(sales)-1]['TOTAL'] + int(price),2)))
-    print("-----------------")
+    
     return inventory, sales
 
 def remove(inventory):
@@ -79,44 +109,38 @@ def findTOTAL(sales):
         total += int(sales[i]['INCOME'])
     return total
 
-def sortButtonPress():
-        print("-----------------")
-        sorted = sort(inventory)
-        for i in range(len(sorted)):
-            print(sorted[i])
-def addButtonPress():
-        print("-----------------")
-        inventory = update(inventory)
-        for i in range(len(inventory)):
-            print(inventory[i])
-def stockButtonPress():
-        print("-----------------")
-        print("stock level changing, add (-) before num to reduce stock")
-        print("-----------------")
-        inventory, sales = stock(inventory, sales)
-        for i in range(len(inventory)):
-            print(inventory[i])
-def valueButtonPress():
-        print("-----------------")
-        sales,inventory = value(sales,inventory)
-        for i in range(len(sales)):
-            print(sales[i])
-def removeButtonPress():
-        print("-----------------")
+def sortButtonPress(sales, inventory,root):
+        root.destroy()
+        
+        sort(inventory,sales)
+def addButtonPress(sales, inventory,root):
+        root.destroy()
+        update(inventory)
+
+def stockButtonPress(sales, inventory,root):
+        root.destroy()
+        stock(inventory, sales)
+       
+def valueButtonPress(sales, inventory,root):
+        
+        value(sales,inventory)
+
+def removeButtonPress(sales, inventory,root):
+        
         for i in range(len(inventory)):
             print(i+1 , " : ", inventory[i])
-        print("-----------------")
+        
         inventory = remove(inventory)
         for i in range(len(inventory)):
             print(inventory[i])
-def statsButtonPress():
-        print("-----------------")
+def statsButtonPress(sales, inventory,root):
+        
         print("Average Income: " + str(findAVG(sales)))
         print("Total Income: " + str(findTOTAL(sales)))
-        print("-----------------")
+        
         
 
-def createUI():
+def createUI(inventory,sales):
     root = tk.Tk()
     global labelText
     gridText = ""
@@ -136,12 +160,12 @@ def createUI():
                         borderwidth = 3,
                         relief="sunken",
                         justify="left")
-    sortButton = tk.Button(borderwidth = 3, text="Sort", command=sortButtonPress)
-    addButton = tk.Button(borderwidth = 3, text="Add", command=addButtonPress)
-    stockButton = tk.Button(borderwidth = 3,  text="Stock", command=stockButtonPress)
-    valueButton = tk.Button(borderwidth = 3,  text="Value", command=valueButtonPress)
-    removeButton = tk.Button(borderwidth = 3, text="Remove", command=removeButtonPress)
-    statsButton = tk.Button(borderwidth = 3,  text="Stats", command=statsButtonPress)
+    sortButton = tk.Button(borderwidth = 3, text="Sort", command=lambda: sortButtonPress (sales,inventory,root))
+    addButton = tk.Button(borderwidth = 3, text="Add", command=lambda: addButtonPress (sales,inventory,root))
+    stockButton = tk.Button(borderwidth = 3,  text="Stock", command=lambda: stockButtonPress (sales,inventory,root))
+    valueButton = tk.Button(borderwidth = 3,  text="Value", command=lambda: valueButtonPress (sales,inventory,root))
+    removeButton = tk.Button(borderwidth = 3, text="Remove", command=lambda: removeButtonPress (sales,inventory,root))
+    statsButton = tk.Button(borderwidth = 3,  text="Stats", command=lambda: statsButtonPress (sales,inventory,root))
     
     sortButton.grid(row=3, column=1 )
     addButton.grid(row=3, column=2 )
@@ -153,7 +177,8 @@ def createUI():
     inventoryGrid.grid(row=2)
     salesGrid.grid(row=3)
     root.mainloop()
-
+global inventory
+global sales
 inventory = []
 sales = []
 with open('inventory.csv', 'r') as file:
@@ -172,59 +197,5 @@ with open('sales.csv', 'r') as file:
         sales.append(dictionary)
 
 import tkinter as tk
-createUI()
-
-
-
-
-
-while True:
-    print("choices: [1]-Sort     [2]-Add     [3]-Stock    [4]-View   [5]-Value   [6]-Sales    [7]-Remove    [8]-Stats")
-    c = ""
-    c = input("input choice: ")
-    if c.lower() == "sort" or c.lower() == "1":
-        print("-----------------")
-        sorted = sort(inventory)
-        for i in range(len(sorted)):
-            print(sorted[i])
-    if c.lower() == "add" or c.lower() == "2":
-        print("-----------------")
-        inventory = update(inventory)
-        for i in range(len(inventory)):
-            print(inventory[i])
-    if c.lower() == "stock" or c.lower() == "3":
-        print("-----------------")
-        print("stock level changing, add (-) before num to reduce stock")
-        print("-----------------")
-        inventory, sales = stock(inventory, sales)
-        for i in range(len(inventory)):
-            print(inventory[i])
-    if c.lower() == "view" or c.lower() == "4":
-        print("-----------------")
-        for i in range(len(inventory)):
-            print(inventory[i])
-    if c.lower() == "value" or c.lower() == "5":
-        print("-----------------")
-        sales,inventory = value(sales,inventory)
-        for i in range(len(sales)):
-            print(sales[i])
-    if c.lower() == "sales" or c.lower() == "6":
-        print("-----------------")
-        for i in range(len(sales)):
-            print(sales[i])
-    if c.lower() == "remove" or c.lower() == "7":
-        print("-----------------")
-        for i in range(len(inventory)):
-            print(i+1 , " : ", inventory[i])
-        print("-----------------")
-        inventory = remove(inventory)
-        for i in range(len(inventory)):
-            print(inventory[i])
-    if c.lower() == "stats" or c.lower() == "8":
-        print("-----------------")
-        print("Average Income: " + str(findAVG(sales)))
-        print("Total Income: " + str(findTOTAL(sales)))
-        print("-----------------")
-        
-            
+createUI(inventory, sales)
             
