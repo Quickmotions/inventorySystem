@@ -56,7 +56,7 @@ def update(inventory,sales):
     priceInput = tk.Entry(updateRoot,borderwidth = 3)
     avaliableLabel = tk.Label(updateRoot,borderwidth = 3, text="Item Avaliability:")
     avaliableInput = tk.Entry(updateRoot,borderwidth = 3)
-    inputButton = tk.Button(updateRoot,borderwidth = 3,  text="Enter", command=lambda: updateInv(inventory,itemLabel,quantitityLabel,priceLabel,avaliableLabel))
+    inputButton = tk.Button(updateRoot,borderwidth = 3,  text="Enter", command=lambda: updateInv(inventory,itemp,quantitityLabel,priceLabel,avaliableLabel))
     backButton = tk.Button(updateRoot,borderwidth = 3,  text="Back", command=lambda: returnMain(updateRoot,inventory,sales))
 
     titleText.grid(row=1)
