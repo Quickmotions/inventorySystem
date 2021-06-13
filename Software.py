@@ -87,7 +87,8 @@ def value(sales,inventory):
     sales.append(newValue)
     UpdateCSV(inventory,sales)
     return sales,inventory
-def stock(inventory, sales):
+
+def confirmStockChange(inventory, sales, label):   
     price = 0
     for i in range(len(inventory)):
         print("current stock = " + str(inventory[i]['QUANTITIY']))
@@ -104,6 +105,24 @@ def stock(inventory, sales):
     
     return inventory, sales
 
+def stock(inventory, sales): 
+    stockRoot = tk.Tk()
+    titleRoot = tk.Label(stockRoot,text="Inventory Managment System (v1.0)")
+    itemNameText = inventory[0]['ITEM']
+    itemAmountText = inventory[0]['QUANTITIY']
+    itemNameLabel = tk.Label(stockRoot,borderwidth = 3, text=itemNameText)
+    itemAmountLabel = tk.Label(stockRoot, borderwidth=3, text=itemAmountText)
+    stockConfirm = tk.Button(stockRoot,borderwidth = 3,  text="Confirm", command=lambda: confirmStockChange(inventory, sales, itemNameLabel))
+    stockEntry = tk.Entry(stockRoot,borderwidth = 3)
+    backButton = tk.Button(stockRoot,borderwidth = 3,  text="Back", command=lambda: returnMain(stockRoot,inventory,sales))
+
+    backButton.grid(row=5, column=1)
+    titleRoot.grid(row=1)
+    itemNameLabel.grid(row=2,column=0)
+    itemAmountLabel.grid(row=4,column=0)
+    stockEntry.grid(row=3,column=0)
+    stockConfirm.grid(row=3,column=1)
+    stockRoot.mainloop()
 def remove(inventory):
     
     x = int(input("enter line number to remove(0 for none): ")) -1
